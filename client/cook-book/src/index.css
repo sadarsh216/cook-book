@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+    background-color: rgba(128, 128, 128, 0.336);
+}
+@media only screen and (max-width: 768px) {
+    #sidebar {
+      display: none;
+    }
+  }
