@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import SidebarLeft from "./SidebarLeft";
 import SidebarRight from "./SidebarRight";
+import Main from "./Main";
 
 const Content = () => {
   return (
@@ -9,8 +10,8 @@ const Content = () => {
       <div id="sidebar" className="flex-auto w-8 ml-10 d-block">
         <SidebarLeft/>
       </div>
-      <div className="flex-auto bg-white w-72">
-        <p>Hey</p>
+      <div className="flex-auto bg-white w-72 p-5">
+        <Main/>
       </div>
       <div id="sidebar"  className="flex-auto w-8 mr-10 d-block">
       <SidebarRight/>
