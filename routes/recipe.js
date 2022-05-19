@@ -1,27 +1,26 @@
 const router = require("express").Router();
 const recipe = require("../models/recipeSchema");
-const { upload, gfs_pointer } = require("../middleware/upload");
+const { upload } = require("../middleware/upload");
 const { verifyUser } = require("../middleware/verify");
 const mongoose = require("mongoose");
-const Grid = require("gridfs-stream")
+const Grid = require("gridfs-stream");
 // var fs = require("fs")
 
 const connection_url = process.env.DB_CONNECTION_URL;
 const conn = mongoose.createConnection(connection_url, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
 });
 
 let gfs, gridfsBucket;
-conn.once('open', () => {
- gridfsBucket = new mongoose.mongo.GridFSBucket(conn.db, {
- bucketName: 'uploads'
+conn.once("open", () => {
+  gridfsBucket = new mongoose.mongo.GridFSBucket(conn.db, {
+    bucketName: "uploads",
+  });
+
+  gfs = Grid(conn.db, mongoose.mongo);
+  gfs.collection("uploads");
 });
-
- gfs = Grid(conn.db, mongoose.mongo);
- gfs.collection('uploads');
-})
-
 
 router.post("/", verifyUser, upload.array("image", 5), async (req, res) => {
   const newRecipe = {
@@ -117,25 +116,41 @@ router.delete("/:id", (req, res) => {
 });
 
 router.get("/image/:filename", (req, res) => {
-    gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
-        // Check if file
-        if (!file || file.length === 0) {
-            return res.status(404).send({
-                msg: 'No file exists'
-            });
-        }
+  gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
+    // Check if file
+    if (!file || file.length === 0) {
+      return res.status(404).send({
+        msg: "No file exists",
+      });
+    }
 
-        // Check if image
-        console.log(file);
-        if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
-            // Read output to browser
-            const readstream = gridfsBucket.openDownloadStream(file._id)
-            readstream.pipe(res);
-        } else {
-            res.status(404).send({
-                msg: 'Not an image'
-            });
-        }
-    });
+    // Check if image
+    if (file.contentType === "image/jpeg" || file.contentType === "image/png") {
+      // Read output to browser
+      const readstream = gridfsBucket.openDownloadStream(file._id);
+      readstream.pipe(res);
+    } else {
+      res.status(404).send({
+        msg: "Not an image",
+      });
+    }
+  });
 });
+
+// router.put("/review/:id", verifyUser, (req, res) => {
+//   recipe.findOne({"_id":req.params.id},
+//     { reviews: { $elemMatch: { user: req.user._id } } },
+//     (err, data) => {
+//       if (err) {
+//         res.status(404).send({
+//           msg: "Not found",
+//         });
+//       } else {
+//         res.status(200).send(data);
+//       }
+//     }
+//   );
+
+//   // db.users.find({awards: {$elemMatch: {award:'National Medal', year:1975}}})
+// });
 module.exports = router;

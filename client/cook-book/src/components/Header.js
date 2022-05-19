@@ -4,12 +4,13 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import Account from "./Account";
 import { logout } from "../actions";
+import { useNavigate } from "react-router-dom";
 
 const navigation = [
-  { name: "Home", href: "#home", current: true },
-  { name: "Sweets", href: "#sweets", current: false },
-  { name: "Deserts", href: "#deserts", current: false },
-  { name: "Drinks", href: "#drinks", current: false },
+  { name: "Home", href: "/", current: false },
+  { name: "Sweets", href: "/sweets", current: false },
+  { name: "Deserts", href: "/deserts", current: false },
+  { name: "Drinks", href: "/drinks", current: false },
 ];
 
 function classNames(...classes) {
@@ -24,6 +25,7 @@ function mapDispatchToProps(dispatch) {
   }
 }
 function Navbar(props) {
+  let navigate = useNavigate()
   const [login, setLogin] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
@@ -34,7 +36,7 @@ function Navbar(props) {
 
   return (
     <>
-      <Disclosure as="nav" className="sticky top-0 w-full bg-white drop-shadow">
+      <Disclosure as="nav" className="sticky top-0 z-40 w-full bg-white drop-shadow">
         {({ open }) => (
           <>
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
@@ -69,19 +71,19 @@ function Navbar(props) {
                   <div className="hidden sm:block sm:ml-6">
                     <div className="flex space-x-4">
                       {navigation.map((item) => (
-                        <a
+                        <p
                           key={item.name}
-                          href={item.href}
+                          onClick={() => navigate(item.href)}
                           className={classNames(
                             item.current
                               ? "bg-indigo-900 text-white"
                               : "text-gray-600  hover:text-indigo-600",
-                            "px-3 py-2 rounded-md text-sm font-medium"
+                            "px-3 py-2 rounded-md text-sm font-medium cursor-default"
                           )}
                           aria-current={item.current ? "page" : undefined}
                         >
                           {item.name}
-                        </a>
+                        </p>
                       ))}
                     </div>
                   </div>
@@ -89,13 +91,6 @@ function Navbar(props) {
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                   {login ? (
                     <>
-                      <button
-                        type="button"
-                        className="p-1 rounded-full text-gray-400 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                      >
-                        <span className="sr-only">View notifications</span>
-                        <BellIcon className="h-6 w-6" aria-hidden="true" />
-                      </button>
                       {/* Profile dropdown */}
                       <Menu as="div" className="ml-3 relative">
                         <div>

@@ -4,7 +4,8 @@ const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
 const authRoute  = require("./routes/auth");
-const recipeRoute = require("./routes/recipe")
+const recipeRoute = require("./routes/recipe");
+const reviewRoute = require("./routes/review");
 
 
 const port = process.env.PORT;
@@ -25,6 +26,7 @@ app.use(express.static('public'));
 app.use('/', express.static(__dirname + '/client/cook-book/build'));
 app.use("/recipe", recipeRoute);
 app.use("/auth", authRoute);
+app.use("/review", reviewRoute);
 
 
 app.listen(port, () => {

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { ArrowCircleRightIcon } from "@heroicons/react/outline";
 import { connect } from "react-redux";
 import { getAllRecipes } from "../actions/recipe";
+import { useNavigate } from "react-router-dom";
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -11,6 +12,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const SidebarLeft = (props) => {
+  let navigate = useNavigate();
   useEffect(() => {
     props.getAllRecipes();
   }, []);
@@ -25,7 +27,7 @@ const SidebarLeft = (props) => {
             {props.data?.map((item, key) => (
               <li
                 key={item._id}
-                onClick={() => alert(item._id)}
+                onClick={() => navigate('/detail', { state: { id: item._id } })}
                 className="px-6 py-2 w-full rounded-t-lg cursor-pointer hover:text-indigo-600 hover:underline"
               >
                 <div className="flex items-center">
