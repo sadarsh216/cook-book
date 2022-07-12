@@ -6,15 +6,25 @@ const reviewSchema = mongoose.Schema({
     ref: "recipe",
     required: true,
   },
-  like: {
-    type: Boolean,
-  },
-  comment: [String],
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
-    required: true,
-  },
+  like: [
+    {
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+        required: true,
+      },
+    },
+  ],
+  review: [
+    {
+      comment: [String],
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+        required: true,
+      },
+    },
+  ],
 });
 
 module.exports = mongoose.model("review", reviewSchema);

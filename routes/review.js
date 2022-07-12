@@ -4,6 +4,37 @@ const recipe = require("../models/recipeSchema");
 
 const router = require("express").Router();
 
+// like
+router.post("/like", verifyUser, async (req, res) => {
+  const reviews = await reviewSchema.findOne(
+    // { recipe: req.body.recipe },
+    {
+      like: {
+        $elemMatch: {
+          user: req.user._id,
+        },
+      },
+    }
+  );
+  if (!reviews) {
+    const newLike = {
+      recipe: req.body.recipe,
+      like: {
+        user: req.user._id,
+      },
+    };
+    reviewSchema.create(newLike, (err, data) => {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.status(200).json(data);
+      }
+    });
+  } else {
+    res.send(reviews);
+  }
+});
+// comment
 router.post("/add", verifyUser, (req, res) => {
   const newReview = req.body;
   newReview.user = req.user._id;

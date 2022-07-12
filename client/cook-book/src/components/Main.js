@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../config";
 
 import Reviews from "./Review";
 
@@ -41,7 +42,7 @@ const Main = (props) => {
         >
           <img
             className="w-full h-64"
-            src={"http://localhost:8080/recipe/image/" + item.image}
+            src={`${BASE_URL}/recipe/image/${item.image}`}
             alt="Sunset in the mountains"
           />
           <div className="px-6 py-4">

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { recipeConstants } from "../constants";
-const BASE_URL = "http://localhost:8080";
+import { BASE_URL } from "../config";
 
 export const getAllRecipes = () => {
   return (dispatch) => {
